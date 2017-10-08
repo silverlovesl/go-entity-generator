@@ -28,22 +28,15 @@ class Postgre2Go(db.DB):
           f.attnum
     """
 
-    def __init__(self, dbname, tablename, username, password, host, port):
-        db.DB.__init__(self, dbname, tablename, username, password, host, port)
+    def __init__(self, dbname, tablename, username, password, host, port, is_json=False):
+        db.DB.__init__(self,
+                       dbname, tablename,
+                       username, password,
+                       host, port,
+                       is_json)
         self.constr = 'postgresql://{}:{}@{}:{}/{}'.format(
             username, password, host, port, dbname)
 
     def convert2GoStruct(self):
-        print(self.constr)
         engine = create_engine(self.constr)
-        df = pd.read_sql(self.SQL_SCHEMA.format(self.tablename), engine)
-        go_struct = [""]
-        tableName = util.trueCase(self.tablename)
-        go_struct.append("type " + tableName + " struct{")
-        for index, row in df.iterrows():
-            is_nullable = row["is_nullable"] == "yes"
-            goFiled = util.trueCase(row["name"])
-            goType = util.mappingGoType(row["type"], is_nullable)
-            go_struct.append(goFiled + " " + goType)
-        go_struct.append("}")
-        return "\n".join(go_struct)
+        return db.DB.convert2GoStruct(self, engine,  self.SQL_SCHEMA)

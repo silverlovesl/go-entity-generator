@@ -11,6 +11,7 @@ ap.add_argument('-u', '--username', default="root")
 ap.add_argument('-p', '--password', default="")
 ap.add_argument('-H', '--host', default="localhost")
 ap.add_argument('-P', '--port', default="3306")
+ap.add_argument('-j', '--json', default="0")
 
 opts = ap.parse_args()
 
@@ -18,10 +19,10 @@ print(opts)
 
 if opts.type == "M":
     convertor = mysql2go.MySql2Go(opts.database, opts.tablename, opts.username,
-                                  opts.password, opts.host, opts.port)
+                                  opts.password, opts.host, opts.port, opts.json == "1")
     print(convertor.convert2GoStruct())
 
 if opts.type == "P":
     convertor = postgre2go.Postgre2Go(opts.database, opts.tablename, opts.username,
-                                      opts.password, opts.host, opts.port)
+                                      opts.password, opts.host, opts.port, opts.json == "1")
     print(convertor.convert2GoStruct())
