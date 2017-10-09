@@ -32,7 +32,7 @@ class DB:
             json_def = ""
             xorm_def = ""
             if self.is_json:
-                json_def = "`json:\"" + col_type + \
+                json_def = "`json:\"" + \
                     util.fistWordLowerCase(go_filed) + "\"`"
             else:
                 xorm_def = "`xorm:\"'{}'\"`".format(col_name)
