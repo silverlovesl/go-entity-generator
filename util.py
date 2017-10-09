@@ -41,7 +41,7 @@ def mappingGoType(colType, isNullable):
         rv = "zero.Int" if isNullable else "int64"
     elif colType in ("float", "decimal", "numeric"):
         rv = "zero.Float" if isNullable else "float64"
-    elif colType in ("datetime", "date", "timestamp without time zone"):
+    elif colType in ("datetime", "date", "timestamp", "timestamp without time zone"):
         rv = "time.Time"
     elif colType in("tinyint", "bool"):
         rv = "bool"
