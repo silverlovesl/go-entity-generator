@@ -17,8 +17,9 @@ class DB:
         connection = engine.connect()
         df = pd.read_sql(schema_query.format(self.tablename), engine)
         go_struct = [""]
-        go_struct.append(
-            "type " + util.trueCase(self.tablename) + " struct{")
+        table_name = util.trueCase(self.tablename)
+        go_struct.append("// {} [Comment]".format(table_name))
+        go_struct.append("type {} struct{{".format(table_name))
         for _, row in df.iterrows():
             is_nullable = row["is_nullable"] == "yes"
             col_name = row["name"]
@@ -27,11 +28,14 @@ class DB:
             _json_ = is_nullable or self.is_json
             go_type = util.mappingGoType(col_type, _json_)
             json_def = ""
+            xorm_def = ""
             if self.is_json:
-                json_def = "`json:\"" + \
+                json_def = "`json:\"" + col_type + \
                     util.fistWordLowerCase(go_filed) + "\"`"
+            else:
+                xorm_def = "`xorm:\"'{}'\"`".format(col_name)
 
-            go_struct.append(util.specialWord(go_filed) +
-                             " " + go_type + " " + json_def)
+            go_struct.append("{} {} {} {}".format(util.specialWord(
+                go_filed), go_type, xorm_def, json_def))
         go_struct.append("}")
         return "\n".join(go_struct)
