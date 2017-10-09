@@ -34,13 +34,13 @@ def fistWordLowerCase(word):
 def mappingGoType(colType, isNullable):
     rv = ""
     if colType in ("char", "varchar", "text", "character", "character varying"):
-        rv = "string" if isNullable else "null.String"
+        rv = "null.String" if isNullable else "string"
     elif colType in ("int", "integer", "smallint"):
-        rv = "int" if isNullable else "zero.Int"
+        rv = "zero.Int" if isNullable else "int"
     elif colType == "bigint":
-        rv = "int64" if isNullable else "zero.Int"
+        rv = "zero.Int" if isNullable else "int64"
     elif colType in ("float", "decimal", "numeric"):
-        rv = "float64" if isNullable else "zero.Float"
+        rv = "zero.Float" if isNullable else "float64"
     elif colType in ("datetime", "date", "timestamp without time zone"):
         rv = "time.Time"
     elif colType in("tinyint", "bool"):

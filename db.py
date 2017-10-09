@@ -25,7 +25,9 @@ class DB:
             col_name = row["name"]
             col_type = row["type"]
             go_filed = util.trueCase(col_name)
-            _json_ = is_nullable or self.is_json
+            _json_ = False
+            if not self.is_json:
+                _json_ = is_nullable
             go_type = util.mappingGoType(col_type, _json_)
             json_def = ""
             xorm_def = ""
