@@ -4,20 +4,24 @@ import util
 
 
 class DB:
-    def __init__(self, dbname, tablename, username, password, host, port, is_json=False):
-        self.dbname = dbname
-        self.tablename = tablename
-        self.username = username
-        self.password = password
-        self.host = host
-        self.port = port
-        self.is_json = is_json
+    def __init__(self, params):
+        self.dbname = params.dbname
+        self.tablename = params.tablename
+        self.username = params.username
+        self.password = params.password
+        self.host = params.host
+        self.port = params.port
+        self.is_json = params.is_json
+        self.pgname = params.pgname
+        self.output = params.output
 
-    def convert2GoStruct(self, engine, schema_query):
+    def convert2GoStruct(self, engine, query):
         connection = engine.connect()
-        df = pd.read_sql(schema_query.format(self.tablename), engine)
-        go_struct = [""]
+        df = pd.read_sql(query, engine)
+        go_struct = []
         table_name = util.trueCase(self.tablename)
+        go_struct.append("package {}".format(self.pgname))
+        go_struct.append("\n")
         go_struct.append("// {} [Comment]".format(table_name))
         go_struct.append("type {} struct{{".format(table_name))
         for _, row in df.iterrows():
@@ -41,3 +45,11 @@ class DB:
                 go_filed), go_type, xorm_def, json_def))
         go_struct.append("}")
         return "\n".join(go_struct)
+
+    def getAllTableNames(self, engine, query):
+        connection = engine.connect()
+        df = pd.read_sql(query, engine)
+        table_names = []
+        for _, row in df.iterrows():
+            table_names.append(row["name"])
+        return table_names

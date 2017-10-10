@@ -45,4 +45,6 @@ def mappingGoType(colType, isNullable):
         rv = "time.Time"
     elif colType in("tinyint", "bool"):
         rv = "bool"
+    elif colType in("json", "jsonb"):
+        rv = "string"
     return rv
