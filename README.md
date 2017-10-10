@@ -12,7 +12,7 @@ pip install psycopg2
 -T | --type      Database type "M":mysql "P":PostgreSQL (Default:M)
 -a | --all       Export all tables (Default:0)
 -o | --output    Output Directory (Default:'')
---pgname         Golang package name (Default:'')
+--pgname         Golang package name (Default:'entity')
 -d | --database  Database name
 -t | --tablename Target table name
 -u | --username  Login user (Default:"root")
