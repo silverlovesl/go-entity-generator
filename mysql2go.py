@@ -23,7 +23,7 @@ class MySql2Go(db.DB):
 
     TABLE_SCHEMA = """
     select
-        TABLE_NAME as name
+        LOWER(TABLE_NAME) as name
     from
         information_schema.tables
     where
